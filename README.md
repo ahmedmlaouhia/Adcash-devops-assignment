@@ -17,6 +17,7 @@
 - Provision a virtual machine on cloud with terraform .
 - Install and configure a Prometheus server on the VM with ansible.
 - Configure Prometheus server to scrape app metrics.
+- Add Grafana as dashboard (Bonus: it needs visualization)
 
 ## Technology choice & decision
 

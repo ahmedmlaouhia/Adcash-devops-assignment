@@ -20,4 +20,5 @@
 
 ## Technology choice & decision
 
-- I have chosen Express with TypeScript is my most used stack and simple setup and use.
+- I have chosen Express with TypeScript because it is my most used stack and simple to set up.
+- I have used Luxon because it provides timezone-aware date and time without many configuration.

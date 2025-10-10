@@ -1,0 +1,16 @@
+# Copy this file to terraform.tfvars (kept out of git) and adjust values for your environment.
+aws_region                = "eu-west-3"
+environment               = "dev"
+resource_name_prefix      = "gandalf"
+key_pair_name             = "gandalf-key"
+public_key_path           = "~/.ssh/gandalf.pub"
+vpc_id                    = "vpc-xxxxxxxx"
+subnet_id                 = "subnet-yyyyyyyy"
+ami_id                    = "ami-zzzzzzzz"
+instance_type             = "t3.micro"
+associate_public_ip       = true
+enable_detailed_monitoring = false
+ssh_allowed_cidrs         = ["0.0.0.0/0"]
+http_allowed_cidrs        = ["0.0.0.0/0"]
+root_volume_size_gb       = 20
+

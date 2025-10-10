@@ -54,9 +54,54 @@ The service manifest includes the annotation `cloud.google.com/load-balancer-typ
 - Configure Prometheus server to scrape app metrics.
 - Add Grafana as dashboard (Bonus: it needs visualization)
 
+### Terraform VM provisioning
+
+The Terraform setup in `step2/terraform` creates:
+
+- An EC2 key pair sourced from a provided public key.
+- A security group that allows SSH (22/tcp) and HTTP (80/tcp).
+- A single EC2 instance (default `t3.micro`) in a specified VPC/subnet, tagged for the Gandalf project.
+
+**Prerequisites**
+
+- Terraform 1.6 or newer
+- AWS CLI with credentials that can manage EC2, security groups, and key pairs
+- Existing VPC and subnet IDs
+- SSH public key available locally
+
+**Repository layout**
+
+```
+step2/
+   terraform/
+      main.tf        # Core AWS resources
+      variables.tf   # Input variables and defaults
+      outputs.tf     # Exposed instance details
+      terraform.tfvars.example  # Template for local overrides (copy to terraform.tfvars)
+```
+
+**Usage**
+
+```bash
+cd step2/terraform
+cp terraform.tfvars.example terraform.tfvars
+# edit terraform.tfvars with real IDs, paths, CIDR ranges, and optional extra tags
+terraform init
+terraform plan -out gandalf.plan
+terraform apply gandalf.plan
+```
+
+Terraform prints the instance ID and public IP (`instance_public_ip` output). That address will be referenced by upcoming Ansible Prometheus playbooks.
+
+When done, destroy the VM and related resources:
+
+```bash
+terraform destroy
+```
+
 ## Technology choice & decision
 
 - **Express + TypeScript** for a familiar, productive web stack with static typing.
 - **Luxon** to manage timezone-aware date formatting without manual offset logic.
-- **prom-client** for first-class Prometheus metrics in Node.js.
-- **GKE** (or any Kubernetes) for deployment parity between local and cloud environments.
+- **prom-client** for Prometheus metrics in Node.js.
+- **GKE** I use GKE because i have a friend that have credits that expires soon and he wants to use them.

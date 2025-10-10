@@ -4,7 +4,7 @@ import promClient from "prom-client"
 import path from "path"
 
 const app = express()
-const port = 3000
+const port = Number(process.env.PORT ?? 3000)
 
 const staticDir = path.join(__dirname, "..", "public")
 app.use("/static", express.static(staticDir))

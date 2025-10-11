@@ -1,0 +1,7 @@
+---
+# Update the targets with the Gandalf service endpoint (host:port syntax).
+prometheus_targets:
+  - 172.31.13.219:30080"
+
+prometheus_image: "prom/prometheus:v2.53.1"
+prometheus_container_name: "prometheus"

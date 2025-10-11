@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: gandalf
+    scheme: http
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+{% for target in prometheus_targets %}
+          - "{{ target }}"
+{% endfor %}

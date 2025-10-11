@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://json.schemastore.org/ansible-playbook.json
+- name: Provision Prometheus on Gandalf VM
+  hosts: prometheus
+  become: true
+  collections:
+    - community.docker
+  pre_tasks:
+    - name: Apply Prometheus defaults
+      ansible.builtin.set_fact:
+        prometheus_config_dir: "{{ prometheus_config_dir | default('/etc/prometheus') }}"
+        prometheus_config_path: "{{ prometheus_config_path | default((prometheus_config_dir | default('/etc/prometheus')) ~ '/prometheus.yml') }}"
+        prometheus_image: "{{ prometheus_image | default('prom/prometheus:v2.53.1') }}"
+        prometheus_container_name: "{{ prometheus_container_name | default('prometheus') }}"
+
+    - name: Validate Prometheus targets were provided
+      ansible.builtin.assert:
+        that:
+          - prometheus_targets | length > 0
+        fail_msg: >-
+          Set `prometheus_targets` (host:port values) to point at the Gandalf metrics endpoint
+          before running the playbook.
+
+  tasks:
+    - name: Install Docker engine and helpers
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - python3-docker
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Ensure Docker service is enabled
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add ubuntu user to docker group
+      ansible.builtin.user:
+        name: ubuntu
+        groups: docker
+        append: true
+
+    - name: Create Prometheus config directory
+      ansible.builtin.file:
+        path: "{{ prometheus_config_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Deploy Prometheus scrape configuration
+      ansible.builtin.template:
+        src: templates/prometheus.yml.j2
+        dest: "{{ prometheus_config_path }}"
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Run Prometheus container
+      community.docker.docker_container:
+        name: "{{ prometheus_container_name }}"
+        image: "{{ prometheus_image }}"
+        restart_policy: unless-stopped
+        ports:
+          - "9090:9090"
+        volumes:
+          - "{{ prometheus_config_path }}:/etc/prometheus/prometheus.yml:rw"
+        command:
+          - "--config.file=/etc/prometheus/prometheus.yml"
+          - "--storage.tsdb.path=/prometheus"
+        container_default_behavior: compatibility
+        state: started

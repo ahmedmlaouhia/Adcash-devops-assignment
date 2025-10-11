@@ -50,7 +50,7 @@ The service manifest includes the annotation `cloud.google.com/load-balancer-typ
 **Tasks**
 
 - Provision a virtual machine on aws cloud with terraform.
-- Install and configure a Prometheus server on the VM with ansible.
+- Install and configure a Prometheus server on the VM with ansible with docker.
 - Configure Prometheus server to scrape app metrics.
 - Add Grafana as dashboard (Bonus: it needs visualization)
 
@@ -98,6 +98,44 @@ When done, destroy the VM and related resources:
 ```bash
 terraform destroy
 ```
+
+### Ansible Prometheus deployment
+
+The configuration in `step2/ansible` installs Docker on the VM and runs Prometheus in a container.
+
+**File layout**
+
+```
+step2/
+   ansible/
+      inventory.ini        # Define the VM public IP / DNS and SSH settings
+      prometheus.yml       # Playbook that installs Docker and runs Prometheus
+      templates/
+         prometheus.yml.j2  # Prometheus scrape configuration template
+```
+
+**Prerequisites**
+
+- Ansible 2.15+ on the control machine
+- Python SSH access to the EC2 instance (same key pair used for Terraform)
+- Ansible collection `community.docker` installed locally:
+
+  ```bash
+  ansible-galaxy collection install community.docker
+  ```
+
+**Usage**
+
+1. Edit `step2/ansible/inventory.ini` with the VM IP/DNS and SSH private key path.
+2. Supply the Gandalf metrics endpoint (host:port) via `prometheus_targets`, e.g.:
+
+   ```bash
+   ansible-playbook -i step2/ansible/inventory.ini \
+      step2/ansible/prometheus.yml \
+      -e prometheus_targets='["IP:80"]'
+   ```
+
+Prometheus will be reachable on the VM at `http://<vm-ip>:9090` once the play completes.
 
 ## Technology choice & decision
 

@@ -142,4 +142,6 @@ Prometheus will be reachable on the VM at `http://<vm-ip>:9090` once the play co
 - **Express + TypeScript** for a familiar, productive web stack with static typing.
 - **Luxon** to manage timezone-aware date formatting without manual offset logic.
 - **prom-client** for Prometheus metrics in Node.js.
-- **GKE** I use GKE because i have a friend that have credits that expires soon and he wants to use them.
+- **GKE** because i have free free credits and there is no free Kubernetes.
+- **AWS** bacause I have more experience and i want to show it with AWS and used the free tier EC2 t3.micro.
+- **Terraform + Ansible** are widely usable and have experience working with them.

@@ -5,10 +5,10 @@ metadata:
   namespace: gandalf
   labels:
     app: gandalf
-  # annotations:
-  #   cloud.google.com/load-balancer-type: "External"
+  annotations:
+    cloud.google.com/load-balancer-type: "External"
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: gandalf
   ports:
@@ -16,4 +16,3 @@ spec:
       port: 80
       targetPort: 80
       protocol: TCP
-      nodePort: 30080

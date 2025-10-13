@@ -48,15 +48,15 @@ resource "aws_security_group_rule" "ssh" {
   description       = "Allow SSH"
 }
 
-# resource "aws_security_group_rule" "http" {
-#   type              = "ingress"
-#   security_group_id = aws_security_group.gandalf.id
-#   from_port         = 80
-#   to_port           = 80
-#   protocol          = "tcp"
-#   cidr_blocks       = var.http_allowed_cidrs
-#   description       = "Allow HTTP"
-# }
+resource "aws_security_group_rule" "grafana" {
+  type              = "ingress"
+  security_group_id = aws_security_group.gandalf.id
+  from_port         = 3000
+  to_port           = 3000
+  protocol          = "tcp"
+  cidr_blocks       = var.http_allowed_cidrs
+  description       = "Allow grafana port"
+}
 
 resource "aws_security_group_rule" "prometheus" {
   type              = "ingress"
@@ -65,7 +65,7 @@ resource "aws_security_group_rule" "prometheus" {
   to_port           = 9090
   protocol          = "tcp"
   cidr_blocks       = var.http_allowed_cidrs
-  description       = "Allow HTTP"
+  description       = "Allow prometheus port"
 }
 
 resource "aws_security_group_rule" "egress" {

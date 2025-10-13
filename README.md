@@ -101,7 +101,7 @@ terraform destroy
 
 ### Ansible Prometheus deployment
 
-The configuration in `step2/ansible` installs Docker on the VM and runs Prometheus in a container.
+The configuration in `step2/ansible` installs Docker on the VM and runs Prometheus and Grafana in containers on a shared Docker network.
 
 **File layout**
 
@@ -109,9 +109,10 @@ The configuration in `step2/ansible` installs Docker on the VM and runs Promethe
 step2/
    ansible/
       inventory.ini        # Define the VM public IP / DNS and SSH settings
-      prometheus.yml       # Playbook that installs Docker and runs Prometheus
+      prometheus.yml       # Playbook that installs Docker and runs Prometheus + Grafana
       templates/
          prometheus.yml.j2  # Prometheus scrape configuration template
+         grafana-datasource.yml.j2  # Grafana datasource that points at Prometheus
 ```
 
 **Prerequisites**
@@ -135,7 +136,7 @@ step2/
       -e prometheus_targets='["IP:80"]'
    ```
 
-Prometheus will be reachable on the VM at `http://<vm-ip>:9090` once the play completes.
+Prometheus will be reachable on the VM at `http://<vm-ip>:9090` and Grafana at `http://<vm-ip>:3000` once the play completes.
 
 ## Technology choice & decision
 

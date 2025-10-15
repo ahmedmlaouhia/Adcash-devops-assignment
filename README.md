@@ -138,6 +138,19 @@ step2/
 
 Prometheus will be reachable on the VM at `http://<vm-ip>:9090` and Grafana at `http://<vm-ip>:3000` once the play completes.
 
+3. Login to Grafana with credentials:
+
+   ```
+   username: admin
+   password: adminpass
+   ```
+
+4. import the dashboard under:
+
+   ```
+   step2/gandalf - colombo metrics Dashboard.json
+   ```
+
 ## Technology choice & decision
 
 - **Express + TypeScript** for a familiar, productive web stack with static typing.

@@ -28,7 +28,7 @@
           before running the playbook.
 
   tasks:
-    - name: Install Docker engine and helpers
+    - name: Install Docker
       ansible.builtin.apt:
         name:
           - docker.io

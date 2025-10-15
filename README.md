@@ -7,7 +7,7 @@
 - Create web server in express with typescript serving Gandalf’s picture at `/gandalf`.
 - Return current Colombo time at `/colombo`.
 - Expose Prometheus metrics tracking requests to `/gandalf` and `/colombo`.
-- Deploy to K8s with static IP address (Load Balancer).
+- Deploy to K8s with static IP address (Load Balancer) on GKE.
 - Restrict ingress to TCP port 80 only.
 
 ### Kubernetes deployment steps
@@ -49,7 +49,7 @@ The service manifest includes the annotation `cloud.google.com/load-balancer-typ
 
 **Tasks**
 
-- Provision a virtual machine on aws cloud with terraform.
+- Provision a virtual machine on AWS cloud with terraform.
 - Install and configure a Prometheus server on the VM with ansible with docker.
 - Configure Prometheus server to scrape app metrics.
 - Add Grafana as dashboard (Bonus: it needs visualization)
@@ -159,3 +159,5 @@ Prometheus will be reachable on the VM at `http://<vm-ip>:9090` and Grafana at `
 - **GKE** because i have free free credits and there is no free Kubernetes.
 - **AWS** bacause I have more experience and i want to show it with AWS and used the free tier EC2 t3.micro.
 - **Terraform + Ansible** are widely usable and have experience working with them.
+- **Prometheus** is technical choice
+- **Grafana** is necessary to visualize the scraped metrics
